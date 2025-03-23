@@ -1,25 +1,29 @@
 use rand;
 
-#[derive(Debug)]
 pub struct Board(pub Vec<Vec<bool>>);
 
 impl Board {
     pub fn update(&mut self) {
-        let width: i32 = self.0[0].len() as i32;
-        let height: i32 = self.0.len() as i32;
+        let width: usize = self.0[0].len();
+        let height: usize = self.0.len();
         let mut new_board: Vec<Vec<bool>> = create_board(width, height, false).0;
 
-        for row in 0..height {
-            for col in 0..width {
+        for row in 0..height as isize {
+            for col in 0..width as isize {
                 let mut neighbour_count: u8 = 0;
 
-                for i in -1..=1 {
-                    for j in -1..=1 {
+                for i in -1..=1 as isize {
+                    for j in -1..=1 as isize {
                         if i == 0 && j == 0 {
                             continue;
                         }
 
-                        if 0 <= col + i && col + i < width && 0 <= row + j && row + j < height && self.0[(row + j) as usize][(col + i) as usize] {
+                        if 0 <= col + i
+                            && col + i < width.try_into().unwrap()
+                            && 0 <= row + j
+                            && row + j < height.try_into().unwrap()
+                            && self.0[(row + j) as usize][(col + i) as usize]
+                        {
                             neighbour_count += 1;
                         }
                     }
@@ -28,7 +32,7 @@ impl Board {
                 new_board[row as usize][col as usize] = match neighbour_count {
                     2 => self.0[row as usize][col as usize],
                     3 => true,
-                    _ => false
+                    _ => false,
                 }
             }
         }
@@ -37,7 +41,7 @@ impl Board {
     }
 }
 
-pub fn create_board(width: i32, height: i32, randomize: bool) -> Board {
+pub fn create_board(width: usize, height: usize, randomize: bool) -> Board {
     let mut result: Vec<Vec<bool>> = Vec::new();
 
     for _ in 0..height {

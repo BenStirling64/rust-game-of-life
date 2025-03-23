@@ -1,9 +1,9 @@
 pub struct BoardProperties {
     pub send_help: bool,
-    pub width: i32,
-    pub height: i32,
-    pub cell_size: i32,
-    pub frame_rate: f32
+    pub width: usize,
+    pub height: usize,
+    pub cell_size: usize,
+    pub frame_rate: usize,
 }
 
 pub fn argument_parser(arg_list: Vec<String>) -> BoardProperties {
@@ -12,7 +12,7 @@ pub fn argument_parser(arg_list: Vec<String>) -> BoardProperties {
         width: 1600,
         height: 800,
         cell_size: 4,
-        frame_rate: 60.
+        frame_rate: 60,
     };
 
     for (i, value) in arg_list[1..].iter().enumerate().step_by(2) {
@@ -20,12 +20,20 @@ pub fn argument_parser(arg_list: Vec<String>) -> BoardProperties {
             "--help" => {
                 properties.send_help = true;
                 break;
-            },
-            "-w" | "--width" => properties.width = (&arg_list[i + 2]).parse::<i32>().unwrap_or(1600),
-            "-h" | "--height" => properties.height = (&arg_list[i + 2]).parse::<i32>().unwrap_or(800),
-            "-c" | "--cell-size" => properties.cell_size = (&arg_list[i + 2]).parse::<i32>().unwrap_or(4),
-            "-f" | "--frame-rate" => properties.frame_rate = (&arg_list[i + 2]).parse::<f32>().unwrap_or(60.),
-            _ => ()
+            }
+            "-w" | "--width" => {
+                properties.width = (&arg_list[i + 2]).parse::<usize>().unwrap_or(1600)
+            }
+            "-h" | "--height" => {
+                properties.height = (&arg_list[i + 2]).parse::<usize>().unwrap_or(800)
+            }
+            "-c" | "--cell-size" => {
+                properties.cell_size = (&arg_list[i + 2]).parse::<usize>().unwrap_or(4)
+            }
+            "-f" | "--frame-rate" => {
+                properties.frame_rate = (&arg_list[i + 2]).parse::<usize>().unwrap_or(60)
+            }
+            _ => (),
         }
     }
 
@@ -39,7 +47,9 @@ pub fn print_help() {
     println!();
     println!("The options are as follows:");
     println!("'-w <width>' or '--width <width>' changes the width of the window to <width> pixels");
-    println!("'-h <height>' or '--height <height>' changes the height of the window to <height> pixels");
+    println!(
+        "'-h <height>' or '--height <height>' changes the height of the window to <height> pixels"
+    );
     println!("'-c <cell_size>' or '--cell-size <cell_size>' changes the size of each cell to <cell_size>x<cell_size> pixels.");
     println!("'-f <fps>' or '--frame-rate <fps>' forces the simulation to target <fps> frames per second.");
 }
